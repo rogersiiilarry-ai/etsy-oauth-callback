@@ -1,0 +1,63 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Etsy OAuth Callback</title>
+<style>
+  body { font-family: -apple-system, system-ui, sans-serif; max-width: 640px; margin: 4rem auto; padding: 0 1.5rem; color: #1a1a1a; }
+  h1 { font-size: 1.4rem; }
+  .box { background: #f4f4f4; border: 1px solid #ddd; border-radius: 8px; padding: 1.25rem; margin: 1.5rem 0; word-break: break-all; font-family: ui-monospace, Menlo, Consolas, monospace; }
+  .label { font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.04em; color: #666; margin-bottom: 0.4rem; }
+  button { font-size: 1rem; padding: 0.6rem 1.2rem; border-radius: 6px; border: 1px solid #333; background: #1a1a1a; color: #fff; cursor: pointer; }
+  button:hover { background: #333; }
+  .status { margin-top: 0.75rem; font-size: 0.9rem; color: #067d06; }
+  .error { color: #b00020; }
+</style>
+</head>
+<body>
+<h1>Etsy authorization complete</h1>
+<p>Copy the code below and paste it back to continue. This page does nothing else -- it only reads what Etsy put in the URL and shows it to you.</p>
+
+<div id="codeSection" hidden>
+  <div class="label">Authorization code</div>
+  <div class="box" id="codeValue"></div>
+  <button id="copyAction" type="button">Copy code</button>
+  <div class="status" id="copyStatus" role="status"></div>
+</div>
+
+<div id="errorSection" hidden>
+  <div class="label">Error</div>
+  <div class="box error" id="errorValue"></div>
+</div>
+
+<div id="emptySection" hidden>
+  <p>No authorization code or error was found in this page's URL.</p>
+</div>
+
+<script>
+  const params = new URLSearchParams(window.location.search);
+  const code = params.get('code');
+  const error = params.get('error');
+  const errorDescription = params.get('error_description');
+
+  if (code) {
+    document.getElementById('codeSection').hidden = false;
+    document.getElementById('codeValue').textContent = code;
+    document.getElementById('copyAction').addEventListener('click', async () => {
+      try {
+        await navigator.clipboard.writeText(code);
+        document.getElementById('copyStatus').textContent = 'Copied.';
+      } catch (_) {
+        document.getElementById('copyStatus').textContent = 'Copy unavailable -- select the code above manually.';
+      }
+    });
+  } else if (error) {
+    document.getElementById('errorSection').hidden = false;
+    document.getElementById('errorValue').textContent = error + (errorDescription ? ': ' + errorDescription : '');
+  } else {
+    document.getElementById('emptySection').hidden = false;
+  }
+</script>
+</body>
+</html>
