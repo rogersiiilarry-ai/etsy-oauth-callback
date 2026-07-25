@@ -16,10 +16,15 @@
 </style>
 </head>
 <body>
-<h1>Etsy authorization complete</h1>
-<p>Copy the code below and paste it back to continue. This page does nothing else -- it only reads what Etsy put in the URL and shows it to you.</p>
+<h1 id="heading">Finishing up...</h1>
+<p id="explainer">Handing your authorization back to the app. This page does nothing else -- it only reads what Etsy put in the URL.</p>
+
+<div id="connectedSection" hidden>
+  <p>Connected. You can close this tab and return to the app.</p>
+</div>
 
 <div id="codeSection" hidden>
+  <p>Couldn't reach the app automatically -- copy the code below and paste it back to continue instead.</p>
   <div class="label">Authorization code</div>
   <div class="box" id="codeValue"></div>
   <button id="copyAction" type="button">Copy code</button>
@@ -38,10 +43,13 @@
 <script>
   const params = new URLSearchParams(window.location.search);
   const code = params.get('code');
+  const state = params.get('state');
   const error = params.get('error');
   const errorDescription = params.get('error_description');
 
-  if (code) {
+  function showManualCodeFallback() {
+    document.getElementById('heading').textContent = 'Etsy authorization complete';
+    document.getElementById('explainer').hidden = true;
     document.getElementById('codeSection').hidden = false;
     document.getElementById('codeValue').textContent = code;
     document.getElementById('copyAction').addEventListener('click', async () => {
@@ -52,10 +60,45 @@
         document.getElementById('copyStatus').textContent = 'Copy unavailable -- select the code above manually.';
       }
     });
+  }
+
+  function portFromState(rawState) {
+    if (!rawState) return null;
+    const first = rawState.split('.')[0];
+    const port = parseInt(first, 10);
+    return Number.isInteger(port) && port > 0 && port < 65536 ? port : null;
+  }
+
+  async function forwardToLocalApp() {
+    const port = portFromState(state);
+    if (!port) {
+      showManualCodeFallback();
+      return;
+    }
+    try {
+      const response = await fetch(`http://127.0.0.1:${port}/callback${window.location.search}`, { signal: AbortSignal.timeout(4000) });
+      if (!response.ok) throw new Error(`local app responded with ${response.status}`);
+      document.getElementById('heading').textContent = 'Etsy authorization complete';
+      document.getElementById('explainer').hidden = true;
+      document.getElementById('connectedSection').hidden = false;
+    } catch (_) {
+      // Real, honest fallback -- the app isn't running, isn't listening on
+      // that port, or the network call was blocked for some other reason.
+      // Never silently fail; give the user a real way to finish manually.
+      showManualCodeFallback();
+    }
+  }
+
+  if (code) {
+    forwardToLocalApp();
   } else if (error) {
+    document.getElementById('heading').textContent = 'Etsy authorization failed';
+    document.getElementById('explainer').hidden = true;
     document.getElementById('errorSection').hidden = false;
     document.getElementById('errorValue').textContent = error + (errorDescription ? ': ' + errorDescription : '');
   } else {
+    document.getElementById('heading').textContent = 'Nothing to do here';
+    document.getElementById('explainer').hidden = true;
     document.getElementById('emptySection').hidden = false;
   }
 </script>
