@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Etsy Photo Organizer -- Privacy Policy</title>
+<style>
+  body { font-family: -apple-system, system-ui, sans-serif; max-width: 640px; margin: 4rem auto; padding: 0 1.5rem; color: #1a1a1a; line-height: 1.6; }
+  h1 { font-size: 1.4rem; }
+  h2 { font-size: 1.05rem; margin-top: 2rem; }
+  .meta { font-size: 0.85rem; color: #666; margin-top: -0.5rem; }
+  ul { padding-left: 1.25rem; }
+</style>
+</head>
+<body>
+<h1>Etsy Photo Organizer -- Privacy Policy</h1>
+<p class="meta">Effective date: July 26, 2026<br>Developer: Larry Rogers</p>
+
+<p>Etsy Photo Organizer is a macOS app that helps an Etsy seller organize their own product photos, using their own real past listing history. This page describes, honestly and completely, what data the app touches and where it goes.</p>
+
+<h2>What the app connects to</h2>
+<p>When you connect your Etsy shop, the app uses Etsy's own sign-in page (OAuth) to ask your permission. The app never sees or stores your Etsy password. Once you approve, the app can make two real, read-only requests to Etsy's API on your behalf:</p>
+<ul>
+  <li>Look up which shop belongs to your account</li>
+  <li>Read your shop's own past listings (titles, tags, categories)</li>
+</ul>
+<p>The app cannot create, edit, or delete anything on Etsy. It only reads. We do not operate an application backend that stores your photos, Etsy listing data, or Etsy credentials. Your Etsy access tokens and your shop's listing data are stored only in a local file on your own Mac.</p>
+<p>The app also communicates directly with Apple's servers to process In-App Purchases (see "Purchases" below), and this page and the app's OAuth callback page are hosted on GitHub Pages, a public hosting service -- we don't operate that hosting infrastructure either, but it's how these pages and the one-time OAuth handoff are served to your browser.</p>
+
+<h2>Your photos</h2>
+<p>You choose which folders on your own Mac the app is allowed to look at -- it never scans your whole computer automatically. Any on-device photo analysis (matching a photo's visual content to your own listing patterns) runs entirely locally, using a model bundled inside the app. Your photos are never uploaded anywhere, to us or anyone else.</p>
+
+<h2>Purchases</h2>
+<p>If you buy a Standard or Pro upgrade, that purchase is handled entirely by Apple's App Store (StoreKit). We never see your payment details. The app only stores, locally on your Mac, which tier you've unlocked and how many photos you've filed -- never transmitted anywhere.</p>
+
+<h2>Disconnecting Etsy and deleting your local data</h2>
+<p>To disconnect your Etsy account at any time, open the app's "Connect to Etsy" tab and click <strong>Disconnect</strong>. This immediately deletes your stored Etsy tokens from your Mac.</p>
+<p>To remove all data the app has stored locally (your connection, added folders, and purchase record), quit the app, open Finder, choose <strong>Go &gt; Go to Folder...</strong>, and enter:</p>
+<p><code>~/Library/Containers/com.endstorm.etsyphotoorganizer/Data/.etsy_photo_organizer/</code></p>
+<p>Then delete that folder. Uninstalling the app itself does not automatically delete this folder, since macOS keeps an app's sandboxed data separate from the app bundle -- it must be removed manually using the steps above, or the folder deleted through Finder as with any other file.</p>
+
+<h2>What we don't do</h2>
+<ul>
+  <li>We don't operate a server that stores or sees your photos, listings, or Etsy credentials</li>
+  <li>We don't use analytics or tracking SDKs</li>
+  <li>We don't share your data with any third party, other than the real, direct calls to Etsy's API (which you explicitly authorize) and Apple's App Store (for purchases)</li>
+</ul>
+
+<h2>Contact</h2>
+<p>Questions about this policy: <a href="mailto:organizersupport@gmail.com">organizersupport@gmail.com</a></p>
+</body>
+</html>
