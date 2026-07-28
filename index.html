@@ -38,6 +38,10 @@
 
 <div id="emptySection" hidden>
   <p>No authorization code or error was found in this page's URL.</p>
+  <!-- Only rendered when there is no code and no error in the URL, i.e. a
+       visitor who landed here directly rather than one mid-handoff, so this
+       can never interfere with a real Etsy authorization. -->
+  <p>Looking for the app? <a href="download.html">Download Etsy Photo Organizer</a>.</p>
 </div>
 
 <script>
